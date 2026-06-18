@@ -4,7 +4,7 @@ import { BACKEND_URL } from '../utils/api';
 
 export default function Hero({ contactInfo, resume }) {
   const name = contactInfo?.name || 'S. Naresh';
-  const headline = contactInfo?.headline || 'Aspiring Software Developer | Problem Solver | Future Full Stack Developer';
+  const headline = contactInfo?.headline || 'Aspiring Cyber Security Professional | Problem Solver | Future Ethical Hacker';
   const college = contactInfo?.college || 'Anna University Regional Campus Madurai';
   const dept = contactInfo?.department || 'Computer Science and Engineering (CSE)';
   

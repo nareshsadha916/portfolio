@@ -71,7 +71,7 @@ export default function Footer({ contactInfo }) {
             S. Naresh
           </span>
           <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm">
-            {contactInfo?.headline || 'Aspiring Software Developer | Problem Solver | Future Full Stack Developer'}
+            {contactInfo?.headline || 'Aspiring Cyber Security Professional | Problem Solver | Future Ethical Hacker'}
           </p>
         </div>
 

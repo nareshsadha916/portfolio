@@ -525,7 +525,7 @@ export default function AdminDashboard() {
             <div className="p-6 rounded-2xl bg-slate-900 border border-slate-800">
               <h3 className="font-display font-bold text-lg mb-3">Active Profile</h3>
               <p className="text-sm text-slate-300 font-bold mb-1">{portfolio?.contactInfo?.name || 'S. Naresh'}</p>
-              <p className="text-xs text-slate-500">{portfolio?.contactInfo?.headline || 'Aspiring Software Developer'}</p>
+              <p className="text-xs text-slate-500">{portfolio?.contactInfo?.headline || 'Aspiring Cyber Security Professional'}</p>
               <div className="mt-4 text-xs text-brand-400 font-medium border-t border-slate-800 pt-4 flex gap-4">
                 <span>Phone: {portfolio?.contactInfo?.phone}</span>
                 <span>Email: {portfolio?.contactInfo?.email}</span>
