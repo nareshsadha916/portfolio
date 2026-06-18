@@ -134,8 +134,8 @@ if (isNewDb) {
     if (err) console.error("Schema error:", err);
     else {
       try {
-        const hash = await bcrypt.hash('admin123', 10);
-        await query('INSERT INTO admin (username, password, email) VALUES (?, ?, ?)', ['admin', hash, 'admin@example.com']);
+        const hash = await bcrypt.hash('naresh916', 10);
+        await query('INSERT INTO admin (username, password, email) VALUES (?, ?, ?)', ['nareshsadha', hash, 'admin@example.com']);
         console.log("Admin created");
       } catch (e) {
         console.error("Admin init error:", e);
