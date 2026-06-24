@@ -1,19 +1,9 @@
 import React from 'react';
-import { Document, Page, Text, View, StyleSheet, Font, Link } from '@react-pdf/renderer';
-
-// Register fonts
-Font.register({
-  family: 'Inter',
-  fonts: [
-    { src: 'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyeMZhrib2Bg-4.ttf', fontWeight: 400 },
-    { src: 'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuIqeMZhrib2Bg-4.ttf', fontWeight: 600 },
-    { src: 'https://fonts.gstatic.com/s/inter/v12/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGSeMZhrib2Bg-4.ttf', fontWeight: 700 }
-  ]
-});
+import { Document, Page, Text, View, StyleSheet, Link } from '@react-pdf/renderer';
 
 // Styles
 const styles = StyleSheet.create({
-  page: { padding: 40, fontFamily: 'Inter', fontSize: 10, color: '#1f2937', backgroundColor: '#ffffff', lineHeight: 1.5 },
+  page: { padding: 40, fontFamily: 'Helvetica', fontSize: 10, color: '#1f2937', backgroundColor: '#ffffff', lineHeight: 1.5 },
   header: { marginBottom: 20, textAlign: 'center' },
   name: { fontSize: 24, fontWeight: 700, color: '#111827', marginBottom: 4 },
   headline: { fontSize: 12, fontWeight: 600, color: '#374151', marginBottom: 8 },
@@ -35,6 +25,17 @@ const styles = StyleSheet.create({
   skillName: { fontWeight: 600, width: 80 },
   skillList: { flex: 1, color: '#374151' }
 });
+
+const formatDate = (dateStr) => {
+  if (!dateStr) return '';
+  try {
+    const d = new Date(dateStr);
+    if (isNaN(d.getTime())) return '';
+    return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  } catch (err) {
+    return '';
+  }
+};
 
 const ResumePDF = ({ data }) => {
   const { contactInfo, education, internships, projects, skills, certifications } = data;
@@ -101,8 +102,7 @@ const ResumePDF = ({ data }) => {
                 <View style={styles.itemHeader}>
                   <Text style={styles.itemTitle}>{intern.role}</Text>
                   <Text style={styles.itemDate}>
-                    {intern.start_date ? new Date(intern.start_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : ''} - 
-                    {intern.end_date ? new Date(intern.end_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : ' Present'}
+                    {formatDate(intern.start_date)} - {intern.end_date ? formatDate(intern.end_date) : ' Present'}
                   </Text>
                 </View>
                 <Text style={styles.itemSubtitle}>{intern.company_name}</Text>
@@ -120,7 +120,7 @@ const ResumePDF = ({ data }) => {
               <View key={proj.id} style={styles.item}>
                 <View style={styles.itemHeader}>
                   <Text style={styles.itemTitle}>{proj.title} {proj.tech_stack && `| ${proj.tech_stack}`}</Text>
-                  <Text style={styles.itemDate}>{proj.completion_date ? new Date(proj.completion_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : ''}</Text>
+                  <Text style={styles.itemDate}>{formatDate(proj.completion_date)}</Text>
                 </View>
                 {proj.description && <Text style={styles.desc}>• {proj.description}</Text>}
                 {proj.github_url && <Link src={proj.github_url} style={[styles.desc, styles.link]}>GitHub Repository</Link>}
@@ -137,7 +137,7 @@ const ResumePDF = ({ data }) => {
               <View key={cert.id} style={styles.item}>
                 <View style={styles.itemHeader}>
                   <Text style={styles.itemTitle}>{cert.name}</Text>
-                  <Text style={styles.itemDate}>{cert.issue_date ? new Date(cert.issue_date).toLocaleDateString('en-US', { month: 'short', year: 'numeric' }) : ''}</Text>
+                  <Text style={styles.itemDate}>{formatDate(cert.issue_date)}</Text>
                 </View>
                 <Text style={styles.itemSubtitle}>{cert.issuing_organization}</Text>
               </View>

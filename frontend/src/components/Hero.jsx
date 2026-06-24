@@ -23,6 +23,12 @@ export default function Hero({ contactInfo, fullData }) {
     }
   }, [fullData, update]);
 
+  useEffect(() => {
+    if (instance.error) {
+      console.error('PDF Generation Error:', instance.error);
+    }
+  }, [instance.error]);
+
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden bg-slate-50 dark:bg-darkBg text-slate-800 dark:text-slate-200">
       
@@ -60,9 +66,18 @@ export default function Hero({ contactInfo, fullData }) {
             {client && fullData && (
               <a
                 href={instance.url || '#'}
-                download={`${name.replace(/\s+/g, '_')}_Resume.pdf`}
+                download={instance.url ? `${name.replace(/\s+/g, '_')}_Resume.pdf` : undefined}
+                onClick={(e) => {
+                  if (instance.error) {
+                    e.preventDefault();
+                    alert(`PDF Generation Error: ${instance.error.message || instance.error}`);
+                  } else if (!instance.url) {
+                    e.preventDefault();
+                    alert('PDF is still generating. Please wait a moment.');
+                  }
+                }}
                 className="glass-button-primary flex items-center justify-center gap-2.5 w-full sm:w-auto cursor-pointer"
-                style={{ pointerEvents: instance.loading ? 'none' : 'auto', opacity: instance.loading ? 0.7 : 1 }}
+                style={{ opacity: instance.loading ? 0.7 : 1 }}
               >
                 {instance.loading ? (
                   <>
