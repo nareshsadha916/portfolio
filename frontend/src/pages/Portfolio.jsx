@@ -76,7 +76,7 @@ export default function Portfolio() {
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-darkBg transition-colors duration-300">
       <Navbar />
-      <Hero contactInfo={data.contactInfo} resume={data.resume} />
+      <Hero contactInfo={data.contactInfo} fullData={data} />
       <About contactInfo={data.contactInfo} />
       <Skills skills={data.skills} />
       <Projects projects={data.projects} />

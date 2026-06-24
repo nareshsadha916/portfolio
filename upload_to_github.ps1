@@ -82,7 +82,7 @@ Write-Host "Parent commit: $parentSha"
 
 # Step 3: Create commit
 $commitJson = @{
-    message = "Add portfolio project files (frontend + backend)"
+    message = "feat: implement auto-generated PDF resume dynamically based on profile data"
     tree = $tree.sha
     parents = @($parentSha)
 } | ConvertTo-Json -Depth 3

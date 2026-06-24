@@ -1,16 +1,23 @@
-import React from 'react';
-import { FileDown, Send, ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { FileDown, Send, ArrowRight, Loader2 } from 'lucide-react';
 import { BACKEND_URL } from '../utils/api';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import ResumePDF from './ResumePDF';
 
-export default function Hero({ contactInfo, resume }) {
+export default function Hero({ contactInfo, fullData }) {
   const name = contactInfo?.name || 'S. Naresh';
   const headline = contactInfo?.headline || 'Aspiring Cyber Security Professional | Problem Solver | Future Ethical Hacker';
   const college = contactInfo?.college || 'Anna University Regional Campus Madurai';
   const dept = contactInfo?.department || 'Computer Science and Engineering (CSE)';
   
+  const [client, setClient] = useState(false);
+  useEffect(() => {
+    setClient(true);
+  }, []);
+  
   const handleDownloadResume = () => {
-    if (resume?.file_url) {
-      window.open(`${BACKEND_URL}${resume.file_url}`, '_blank');
+    if (fullData?.resume?.file_url) {
+      window.open(`${BACKEND_URL}${fullData.resume.file_url}`, '_blank');
     } else {
       alert('Resume has not been uploaded yet. S. Naresh can upload it from the Admin Dashboard!');
     }
@@ -50,13 +57,20 @@ export default function Hero({ contactInfo, resume }) {
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
-            <button
-              onClick={handleDownloadResume}
-              className="glass-button-primary flex items-center justify-center gap-2.5 w-full sm:w-auto cursor-pointer"
-            >
-              <FileDown size={18} />
-              <span>Download Resume</span>
-            </button>
+            {client && fullData && (
+              <PDFDownloadLink
+                document={<ResumePDF data={fullData} />}
+                fileName={`${name.replace(/\s+/g, '_')}_Resume.pdf`}
+                className="glass-button-primary flex items-center justify-center gap-2.5 w-full sm:w-auto cursor-pointer"
+              >
+                {({ loading }) => (
+                  <>
+                    {loading ? <Loader2 size={18} className="animate-spin" /> : <FileDown size={18} />}
+                    <span>{loading ? 'Generating PDF...' : 'Download Resume'}</span>
+                  </>
+                )}
+              </PDFDownloadLink>
+            )}
             
             <a
               href="#contact"

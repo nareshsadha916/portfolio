@@ -365,35 +365,6 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleUploadResume = async (e) => {
-    e.preventDefault();
-    if (!resumeFile) {
-      alert('Please choose a PDF file first.');
-      return;
-    }
-    try {
-      const fd = new FormData();
-      fd.append('resume', resumeFile);
-      await uploadResume(fd);
-      alert('Resume file uploaded successfully!');
-      setResumeFile(null);
-      loadData();
-    } catch (err) {
-      alert(err.message);
-    }
-  };
-
-  const handleDeleteResume = async () => {
-    if (!window.confirm('Delete the active resume file?')) return;
-    try {
-      await deleteResume();
-      alert('Resume deleted successfully.');
-      loadData();
-    } catch (err) {
-      alert(err.message);
-    }
-  };
-
   const handleDeleteMessage = async (id) => {
     if (!window.confirm('Delete this inquiry message?')) return;
     try {
@@ -426,7 +397,6 @@ export default function AdminDashboard() {
     { id: 'achievements', label: 'Achievements', icon: Trophy },
     { id: 'education', label: 'Education', icon: GraduationCap },
     { id: 'contact', label: 'Profile', icon: User },
-    { id: 'resume', label: 'Resume', icon: FileText },
     { id: 'messages', label: `Messages (${messages.length})`, icon: Mail },
   ];
 
@@ -942,79 +912,7 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Tab 9: RESUME */}
-        {activeTab === 'resume' && (
-          <div className="space-y-8 animate-fade-in max-w-xl">
-            <div>
-              <h2 className="font-display font-extrabold text-3xl text-white">Resume Management</h2>
-              <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider mt-1.5">Upload, Update or Remove Resume PDF</p>
-            </div>
-
-            <div className="p-8 rounded-2xl bg-slate-900 border border-slate-800 space-y-6">
-              
-              {/* Active State */}
-              <div>
-                <h3 className="font-display font-bold text-base mb-2">Active Document</h3>
-                {portfolio?.resume ? (
-                  <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                      <FileText className="text-brand-500" size={24} />
-                      <div className="text-left">
-                        <p className="text-xs font-bold text-slate-300">resume_active.pdf</p>
-                        <p className="text-[10px] text-slate-500">Uploaded on {new Date(portfolio.resume.uploaded_at).toLocaleDateString()}</p>
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <a
-                        href={`${BACKEND_URL}${portfolio.resume.file_url}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300"
-                      >
-                        <ArrowRight size={14} className="-rotate-45" />
-                      </a>
-                      <button
-                        onClick={handleDeleteResume}
-                        className="p-2 rounded-lg bg-red-950/40 hover:bg-red-900/40 text-red-400 outline-none"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <p className="text-sm text-slate-500 italic">No resume file uploaded yet.</p>
-                )}
-              </div>
-
-              {/* Upload Form */}
-              <form onSubmit={handleUploadResume} className="border-t border-slate-800 pt-6 space-y-4">
-                <h3 className="font-display font-bold text-base">Upload New Document</h3>
-                
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wide">Choose PDF File</label>
-                  <input
-                    type="file"
-                    accept=".pdf"
-                    onChange={e => setResumeFile(e.target.files[0])}
-                    className="text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-brand-500/10 file:text-brand-400 file:cursor-pointer hover:file:bg-brand-500/20"
-                    required
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="glass-button-primary w-full flex items-center justify-center gap-2 py-3 cursor-pointer"
-                >
-                  <FileUp size={16} />
-                  <span>Upload Resume File</span>
-                </button>
-              </form>
-
-            </div>
-          </div>
-        )}
-
-        {/* Tab 10: MESSAGES INBOX */}
+        {/* Tab 9: MESSAGES INBOX */}
         {activeTab === 'messages' && (
           <div className="space-y-8 animate-fade-in max-w-4xl">
             <div>
