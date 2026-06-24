@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FileDown, Send, ArrowRight, Loader2 } from 'lucide-react';
 import { BACKEND_URL } from '../utils/api';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { usePDF } from '@react-pdf/renderer';
 import ResumePDF from './ResumePDF';
 
 export default function Hero({ contactInfo, fullData }) {
@@ -11,17 +11,17 @@ export default function Hero({ contactInfo, fullData }) {
   const dept = contactInfo?.department || 'Computer Science and Engineering (CSE)';
   
   const [client, setClient] = useState(false);
+  const [instance, update] = usePDF({ document: <ResumePDF data={fullData} /> });
+
   useEffect(() => {
     setClient(true);
   }, []);
-  
-  const handleDownloadResume = () => {
-    if (fullData?.resume?.file_url) {
-      window.open(`${BACKEND_URL}${fullData.resume.file_url}`, '_blank');
-    } else {
-      alert('Resume has not been uploaded yet. S. Naresh can upload it from the Admin Dashboard!');
+
+  useEffect(() => {
+    if (fullData) {
+      update(<ResumePDF data={fullData} />);
     }
-  };
+  }, [fullData, update]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-24 overflow-hidden bg-slate-50 dark:bg-darkBg text-slate-800 dark:text-slate-200">
@@ -58,18 +58,24 @@ export default function Hero({ contactInfo, fullData }) {
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
             {client && fullData && (
-              <PDFDownloadLink
-                document={<ResumePDF data={fullData} />}
-                fileName={`${name.replace(/\s+/g, '_')}_Resume.pdf`}
+              <a
+                href={instance.url || '#'}
+                download={`${name.replace(/\s+/g, '_')}_Resume.pdf`}
                 className="glass-button-primary flex items-center justify-center gap-2.5 w-full sm:w-auto cursor-pointer"
+                style={{ pointerEvents: instance.loading ? 'none' : 'auto', opacity: instance.loading ? 0.7 : 1 }}
               >
-                {({ loading }) => (
+                {instance.loading ? (
                   <>
-                    {loading ? <Loader2 size={18} className="animate-spin" /> : <FileDown size={18} />}
-                    <span>{loading ? 'Generating PDF...' : 'Download Resume'}</span>
+                    <Loader2 size={18} className="animate-spin" />
+                    <span>Generating PDF...</span>
+                  </>
+                ) : (
+                  <>
+                    <FileDown size={18} />
+                    <span>Download Resume</span>
                   </>
                 )}
-              </PDFDownloadLink>
+              </a>
             )}
             
             <a
